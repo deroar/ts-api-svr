@@ -5,10 +5,7 @@
             true,
             "check-space"
         ],
-        "indent": [
-            true,
-            "tabs"
-        ],
+        "indent": [true, "spaces", 4],
         "no-eval": true,
         "no-internal-module": true,
         "no-trailing-whitespace": true,
