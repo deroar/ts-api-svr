@@ -7,6 +7,6 @@ const server = http.createServer(app);
 
 // HTTPサーバーの起動
 server.listen(port, () => {
-    const hostName = process.env.HOSTNAME || os.hostname() || '';
-    console.log(`server listen on ${port}`);
+    const hostName: string = process.env.HOSTNAME || os.hostname() || '';
+    console.log(`server listen on ${hostName}:${port}`);
 });
