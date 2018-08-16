@@ -2,23 +2,24 @@
   "name": "ts-api-svr",
   "version": "1.0.0",
   "description": "api server with typescript ",
-  "main": "src/app.ts",
+  "main": "src/index.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/deroar/ts-api-svr.git"
   },
   "scripts": {
     "build": "npm run clean-app && tsc --outDir ./dist",
-    "start": "node dist/app.js",
+    "start": "node dist/index.js",
     "restart": "npm run build && npm start",
     "clean-app": "rm -rf ./dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test mocha --require espower-typescript/guess \"./src/test/**/*.ts\" --exit"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/mocha": "^5.2.5",
     "@types/power-assert": "^1.5.0",
+    "espower-ts-node": "^1.0.3",
     "espower-typescript": "^9.0.0",
     "mocha": "^5.2.0",
     "power-assert": "^1.6.0",
@@ -32,6 +33,7 @@
     "@types/express-session": "^1.15.10",
     "@types/node": "^10.7.0",
     "@types/random-js": "^1.0.30",
+    "@types/redis": "^2.8.6",
     "@types/uuid": "^3.4.3",
     "body-parser": "^1.18.3",
     "config": "^2.0.1",
@@ -39,6 +41,7 @@
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "random-js": "^1.0.8",
+    "redis": "^2.8.0",
     "typescript": "^3.0.1",
     "uuid": "^3.3.2"
   }

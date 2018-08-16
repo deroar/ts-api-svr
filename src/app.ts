@@ -1,12 +1,10 @@
-import * as os from 'os';
-import * as http from 'http';
-import app from './express';
+import express from 'express';
+import * as login from './controllers/login';
+import * as user from './controllers/user';
+const app = express();
 
-const port: number = Number(process.env.port) || 3000;
-const server = http.createServer(app);
+app.get('/', login.login);
+app.get('/user', user.get);
+app.get('/user_profile', user.getProfile);
 
-// HTTPサーバーの起動
-server.listen(port, () => {
-    const hostName: string = process.env.HOSTNAME || os.hostname() || '';
-    console.log(`server listen on ${hostName}:${port}`);
-});
+export default app;
