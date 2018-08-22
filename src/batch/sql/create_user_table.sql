@@ -1,0 +1,1 @@
+create table user (id varchar(255) not null primary key, name varchar(255) not null default "", exp bigint(20) not null default 0, createdAt datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, updatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP);

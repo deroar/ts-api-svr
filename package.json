@@ -40,8 +40,12 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "mysql2": "^1.6.1",
     "random-js": "^1.0.8",
     "redis": "^2.8.0",
+    "reflect-metadata": "^0.1.12",
+    "sequelize": "^4.38.0",
+    "sequelize-typescript": "^0.6.6",
     "typescript": "^3.0.1",
     "uuid": "^3.3.2"
   }
