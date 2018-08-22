@@ -21,6 +21,7 @@ export let create = (req: express.Request, res: express.Response) => {
     const sequelize = MysqlWrapper.getInstance('user');
 
     Promise.resolve()
+    .then(() => sequelize.addModels([User]))
     .then(() => sequelize.sync())
     .then(() => {
         const new_user: User = new User({
@@ -40,20 +41,41 @@ export let create = (req: express.Request, res: express.Response) => {
 };
 
 export let get = (req: express.Request, res: express.Response) => {
-    const result = {};
-    res.header('Content-Type', 'application/json; charset=utf-8');
-    res.send(result);
+    Promise.resolve()
+    .then(() => {
+        const sequelize = MysqlWrapper.getInstance('user');
+        return sequelize.addModels([User]);
+    })
+    .then(() => {
+        User.findByPrimary(req.query.id)
+        .then((result) => {
+            res.header('Content-Type', 'application/json; charset=utf-8');
+            res.send(result);
+        });
+    });
 };
 
-export let getProfile = (req: express.Request, res: express.Response) => {
-    const result: UserProfile  = {
-        id: uuid.v4(),
-        rank: 1,
-    };
-    res.header('Content-Type', 'application/json; charset=utf-8');
-    res.send(result);
-};
+export let updateName = (req: express.Request, res: express.Response) => {
+    const id: string = req.body.id;
+    const name: string = req.body.name;
 
-export let getExp = (req: express.Request, res: express.Response) => {
+    console.log(id, name);
+
     const sequelize = MysqlWrapper.getInstance('user');
+    Promise.resolve()
+    .then(() => sequelize.addModels([User]))
+    .then(() => User.update({ name }, { where: { id } }))
+    .then(() => sequelize.sync())
+    .then(() => {
+        return User.findByPrimary(req.query.id)
+        .then((result) => {
+            res.header('Content-Type', 'application/json; charset=utf-8');
+            res.send(result);
+        });
+    });
+};
+
+export let updateExp = (req: express.Request, res: express.Response) => {
+    const id: string = req.query.id;
+
 };
