@@ -4,28 +4,22 @@ import * as randomJs from 'random-js';
 import { MysqlWrapper } from '../common/mysql_wrapper';
 import User from '../models/user';
 
-interface UserProfile {
-    id: string;
-    rank: number;
-}
 
 const engine: randomJs.Engine = randomJs.engines.mt19937().autoSeed();
 
 export let create = (req: express.Request, res: express.Response) => {
     const result = {
-        id: uuid.v4(),
+        userId: uuid.v4(),
         name: 'test_user_' + randomJs.integer(100, 999)(engine),
         exp: 0,
     };
 
     const sequelize = MysqlWrapper.getInstance('user');
 
-    Promise.resolve()
-    .then(() => sequelize.addModels([User]))
-    .then(() => sequelize.sync())
+    sequelize.sync()
     .then(() => {
         const new_user: User = new User({
-            id: result.id,
+            userId: result.userId,
             name: result.name,
             exp: 0,
         });
@@ -41,13 +35,11 @@ export let create = (req: express.Request, res: express.Response) => {
 };
 
 export let get = (req: express.Request, res: express.Response) => {
-    Promise.resolve()
+    const sequelize = MysqlWrapper.getInstance('user');
+
+    sequelize.sync()
     .then(() => {
-        const sequelize = MysqlWrapper.getInstance('user');
-        return sequelize.addModels([User]);
-    })
-    .then(() => {
-        User.findByPrimary(req.query.id)
+        User.findByPrimary(req.query.userId)
         .then((result) => {
             res.header('Content-Type', 'application/json; charset=utf-8');
             res.send(result);
@@ -56,18 +48,14 @@ export let get = (req: express.Request, res: express.Response) => {
 };
 
 export let updateName = (req: express.Request, res: express.Response) => {
-    const id: string = req.body.id;
+    const userId: string = req.body.userId;
     const name: string = req.body.name;
 
-    console.log(id, name);
-
     const sequelize = MysqlWrapper.getInstance('user');
-    Promise.resolve()
-    .then(() => sequelize.addModels([User]))
-    .then(() => User.update({ name }, { where: { id } }))
+    User.update({ name }, { where: { userId } })
     .then(() => sequelize.sync())
     .then(() => {
-        return User.findByPrimary(req.query.id)
+        return User.findByPrimary(req.query.userId)
         .then((result) => {
             res.header('Content-Type', 'application/json; charset=utf-8');
             res.send(result);
@@ -76,6 +64,17 @@ export let updateName = (req: express.Request, res: express.Response) => {
 };
 
 export let updateExp = (req: express.Request, res: express.Response) => {
-    const id: string = req.query.id;
+    const userId: string = req.body.userId;
+    const incExp: number = req.body.exp || randomJs.integer(1, 100)(engine);
 
+    const sequelize = MysqlWrapper.getInstance('user');
+    User.update({ exp: sequelize.literal(`exp + ${incExp}`) }, { where: { userId } })
+    .then(() => sequelize.sync())
+    .then(() => {
+        return User.findByPrimary(req.query.userId)
+        .then((result) => {
+            res.header('Content-Type', 'application/json; charset=utf-8');
+            res.send(result);
+        });
+    });
 };

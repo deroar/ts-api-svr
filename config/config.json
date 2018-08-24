@@ -1,0 +1,30 @@
+{
+  "development": {
+    "username": "root",
+    "password": "Nori0726+",
+    "database": "ts_development",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "Nori0726+",
+    "database": "ts_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "local": {
+    "username": "root",
+    "password": "Nori0726+",
+    "database": "ts_local",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "Nori0726+",
+    "database": "ts_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}

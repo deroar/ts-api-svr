@@ -1,4 +1,4 @@
-import { Table, Column, Model, AllowNull, Default, DefaultScope, CreatedAt, UpdatedAt, PrimaryKey } from 'sequelize-typescript';
+import { Table, Column, Model, AllowNull, Default, DefaultScope, CreatedAt, UpdatedAt, PrimaryKey, Length } from 'sequelize-typescript';
 
 @DefaultScope({
     order: ['id', 'name', 'exp', ],
@@ -11,10 +11,10 @@ import { Table, Column, Model, AllowNull, Default, DefaultScope, CreatedAt, Upda
 export default class User extends Model<User> {
     @PrimaryKey
     @Column
-    id: string;
+    userId: string;
 
     @AllowNull(false)
-    @Default('')
+    @Length({min: 2, max: 20})
     @Column
     name: string;
 
