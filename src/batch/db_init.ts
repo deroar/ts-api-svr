@@ -63,7 +63,7 @@ function createTables() {
         .then(() => {
             const tables = getTables();
             for (const key in tables) {
-                let _sequelize = MysqlWrapper.getInstance(key);
+                let _sequelize = MysqlWrapper.getInstance();
                 _sequelize.addModels([tables[key]]);
             }
         });

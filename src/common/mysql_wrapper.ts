@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize-typescript';
 
 export class MysqlWrapper {
-    static getInstance(path) {
+    static getInstance() {
         const env: string = process.env.NODE_ENV || 'local';
         return new Sequelize({
             database: `ts_${env}`,
@@ -13,7 +13,6 @@ export class MysqlWrapper {
             dialectOptions: {
                 insecureAuth: true,
             },
-            modelPaths: [__dirname + `/../models/${path}.ts`],
             logging: console.log,
         });
     }

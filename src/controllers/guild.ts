@@ -14,9 +14,11 @@ export let create = (req: express.Request, res: express.Response) => {
         role: 1,
     };
 
-    const sequelize = MysqlWrapper.getInstance('guild');
+    const sequelize = MysqlWrapper.getInstance();
 
-    sequelize.sync()
+    Promise.resolve()
+    .then(() => sequelize.addModels([Guild]))
+    .then(() => sequelize.sync())
     .then(() => {
         const new_guild: Guild = new Guild({
             guildId: register.guildId,
@@ -38,9 +40,11 @@ export let addMember = (req: express.Request, res: express.Response) => {
     const guildId = req.body.guildId;
     const userId = req.body.userId;
 
-    const sequelize = MysqlWrapper.getInstance('guild');
+    const sequelize = MysqlWrapper.getInstance();
 
-    sequelize.sync()
+    Promise.resolve()
+    .then(() => sequelize.addModels([Guild]))
+    .then(() => sequelize.sync())
     .then(() => {
         const new_guild: Guild = new Guild({
             guildId: guildId,

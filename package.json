@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jsonwebtoken": "^7.2.8",
     "@types/mocha": "^5.2.5",
     "@types/power-assert": "^1.5.0",
     "espower-ts-node": "^1.0.3",
@@ -41,6 +42,7 @@
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "fs": "0.0.1-security",
+    "jsonwebtoken": "^8.3.0",
     "mysql2": "^1.6.1",
     "path": "^0.12.7",
     "random-js": "^1.0.8",

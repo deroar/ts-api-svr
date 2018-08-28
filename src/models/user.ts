@@ -1,7 +1,7 @@
 import { Table, Column, Model, AllowNull, Default, DefaultScope, CreatedAt, UpdatedAt, PrimaryKey, Length } from 'sequelize-typescript';
 
 @DefaultScope({
-    order: ['id', 'name', 'exp', ],
+    order: ['userId', 'name', 'exp', ],
 })
 @Table({
     tableName: 'user',
