@@ -2,7 +2,7 @@ import User from './user';
 import { Table, Column, Model, AllowNull, Default, DefaultScope, CreatedAt, UpdatedAt, PrimaryKey, ForeignKey, Unique } from 'sequelize-typescript';
 
 @DefaultScope({
-    order: ['id', 'userId', 'role', ],
+    order: ['guildId', 'userId', 'role', ],
 })
 @Table({
     tableName: 'guild',

@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { MysqlWrapper } from '../common/mysql_wrapper';
 import User from '../models/user';
 import Guild from '../models/guild';
+import Account from '../models/account';
 
 const databases: string[] = [
     'ts'
@@ -10,6 +11,7 @@ const databases: string[] = [
 const tables = {
     'user': User,
     'guild': Guild,
+    'account': Account,
 };
 
 const sequelize = new Sequelize({

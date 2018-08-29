@@ -15,10 +15,10 @@ export let get = (req: express.Request, res: express.Response) => {
     .then(() => sequelize.addModels([User]))
     .then(() => sequelize.sync())
     .then(() => User.findByPrimary(req.query.userId))
+    .then((user: User) => convertUserModelToResponse(user))
     .then((result) => {
-        console.log(result.dataValues);
         res.header('Content-Type', 'application/json; charset=utf-8');
-        res.send(result.dataValues);
+        res.send(result);
     });
 };
 
@@ -35,9 +35,10 @@ export let updateName = (req: express.Request, res: express.Response) => {
     .then(() => sequelize.sync())
     .then(() => {
         return User.findByPrimary(req.query.userId)
+        .then((user: User) => convertUserModelToResponse(user))
         .then((result) => {
             res.header('Content-Type', 'application/json; charset=utf-8');
-            res.send(result.dataValues);
+            res.send(result);
         });
     });
 };
@@ -54,9 +55,19 @@ export let updateExp = (req: express.Request, res: express.Response) => {
     .then(() => sequelize.sync())
     .then(() => {
         return User.findByPrimary(req.query.userId)
+        .then((user: User) => convertUserModelToResponse(user))
         .then((result) => {
             res.header('Content-Type', 'application/json; charset=utf-8');
-            res.send(result.dataValues);
+            res.send(result);
         });
     });
+};
+
+const convertUserModelToResponse = (userModel: User) => {
+    const user = userModel.dataValues;
+    return {
+        userId: user.userId,
+        userName: user.name,
+        userExp: user.exp,
+    };
 };

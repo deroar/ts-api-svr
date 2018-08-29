@@ -2,9 +2,10 @@ import * as express from 'express';
 import * as jwt from 'jsonwebtoken';
 
 const APP_SECRET = 'TN93KF8OH4FB3T9X';
+const GAME_TOKEN_HEADER = 'x-access-token';
 
 export const requireToken = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const token = req.body.token || req.query.token || req.headers['x-access-token'];
+    const token = req.body.token || req.query.token || req.headers[GAME_TOKEN_HEADER];
     await verifyToken(token).catch((err: any) => {
         res.sendStatus(401);
     });

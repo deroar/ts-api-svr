@@ -1,4 +1,5 @@
-import { Table, Column, Model, AllowNull, Default, DefaultScope, CreatedAt, UpdatedAt, PrimaryKey, Length } from 'sequelize-typescript';
+import { Table, Column, Model, AllowNull, Default, DefaultScope, PrimaryKey, Length, ForeignKey } from 'sequelize-typescript';
+import Guild from './guild';
 
 @DefaultScope({
     order: ['userId', 'name', 'exp', ],
@@ -22,4 +23,9 @@ export default class User extends Model<User> {
     @Default(0)
     @Column
     exp: number;
+
+    @ForeignKey(() => Guild)
+    @Default('')
+    @Column
+    guildId: string;
 }

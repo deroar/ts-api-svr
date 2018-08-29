@@ -4,10 +4,9 @@ import { MysqlWrapper } from '../common/mysql_wrapper';
 import User from '../models/user';
 import * as accountService from '../services/account';
 
-
 const engine: randomJs.Engine = randomJs.engines.mt19937().autoSeed();
 
-export const createUser = (name) => {
+export const createUser = (account_name: string) => {
     const result = {
         userId: uuid.v4(),
         name: 'test_user_' + randomJs.integer(100, 999)(engine),
@@ -20,12 +19,13 @@ export const createUser = (name) => {
     .then(() => sequelize.addModels([User]))
     .then(() => sequelize.sync())
     // account テーブルの userIdを更新する
-    .then(() => accountService.updateUserId(name, result.userId))
+    .then(() => accountService.updateUserId(account_name, result.userId))
     .then(() => {
         const new_user: User = new User({
             userId: result.userId,
             name: result.name,
             exp: 0,
+            guildId: '',
         });
         return new_user.save();
     });
