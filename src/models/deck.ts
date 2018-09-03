@@ -8,7 +8,7 @@ import { Table, Column, Model, AllowNull, Default, DefaultScope, PrimaryKey, Max
     timestamps: true,
     paranoid: true,
 })
-export default class User extends Model<User> {
+export default class Deck extends Model<Deck> {
     @PrimaryKey
     @Column
     userId: string;

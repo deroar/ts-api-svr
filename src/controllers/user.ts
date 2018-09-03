@@ -1,6 +1,5 @@
 import * as express from 'express';
-import * as uuid from 'uuid';
-import * as randomJs from 'random-js';
+import randomJs from 'random-js';
 import { MysqlWrapper } from '../common/mysql_wrapper';
 import User from '../models/user';
 

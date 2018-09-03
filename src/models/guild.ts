@@ -1,5 +1,5 @@
 import User from './user';
-import { Table, Column, Model, AllowNull, Default, DefaultScope, CreatedAt, UpdatedAt, PrimaryKey, ForeignKey, Unique } from 'sequelize-typescript';
+import { Table, Column, Model, AllowNull, Default, DefaultScope, PrimaryKey, ForeignKey } from 'sequelize-typescript';
 
 @DefaultScope({
     order: ['guildId', 'userId', 'role', ],

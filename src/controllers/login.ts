@@ -24,11 +24,11 @@ export let login = (req: express.Request, res: express.Response) => {
         return Account.findOrCreate({where: { name }, defaults: { password, userId: '', hash }});
     })
     .then((result) => {
-        // 新規作成の場合
+        // 新規作成の場合はユーザ作成
         if (result[1]) {
             return userService.createUser(result[0].name);
         }
-        // 既存ユーザの場合
+        // 既存ユーザの場合はユーザ取得
         return userService.get(result[0].userId);
     })
     .then((user) => {

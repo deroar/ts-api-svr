@@ -8,7 +8,7 @@ import { Table, Column, Model, AllowNull, Default, DefaultScope, CreatedAt, Upda
     timestamps: true,
     paranoid: true,
 })
-export default class User extends Model<User> {
+export default class Account extends Model<Account> {
     @PrimaryKey
     @Unique
     @Column
