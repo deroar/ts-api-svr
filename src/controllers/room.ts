@@ -33,6 +33,7 @@ export let create = async (req: express.Request, res: express.Response) => {
     const redisClient = RedisWrapper.getClient();
     const roomMemberKey: string = makeRoomMemberRedisKey(roomId);
     const roomStatusKey: string = makeRoomStatusRedisKey(roomId);
+
     return redisClient.hexistsAsync(roomMemberKey, team)
     .then((result) => {
         if (result) {
@@ -60,6 +61,7 @@ export let join = (req: express.Request, res: express.Response) => {
     const roomMemberKey: string = makeRoomMemberRedisKey(roomId);
     const roomStatusKey: string = makeRoomStatusRedisKey(roomId);
 
+    // TODO: レースコンディション対策
     return redisClient.hgetAsync(roomMemberKey, team)
     .then((memberVals) => {
         const members = separateValues(memberVals);
@@ -94,7 +96,36 @@ export let roomInfo = (req: express.Request, res: express.Response) => {
     });
 };
 
-function getRoomInfo(roomId: string): RoomInfo {
+export let updateMemberStatus = (req: express.Request, res: express.Response) => {
+    const userId: string = req.body.userId;
+    const roomId: string = req.body.roomId;
+    const status: string = constants.USER_STATUS_READY;
+    const roomStatusKey: string = makeRoomStatusRedisKey(roomId);
+    const redisClient = RedisWrapper.getClient();
+
+    return Promise.resolve()
+    .then(() => redisClient.hsetAsync(roomStatusKey, userId, status))
+    .then(() => getRoomInfo(roomId))
+    .then((roomInfo) => {
+        res.header('Content-Type', 'application/json; charset=utf-8');
+        res.send(roomInfo);
+    });
+};
+
+export let leave = (req: express.Request, res: express.Response) => {
+    const userId: string = req.body.userId;
+    const roomId: string = req.body.roomId;
+
+    return Promise.resolve()
+    .then(() => deleteRoomMember(roomId, userId))
+    .then(() => {
+        const roomInfo = getRoomInfo(roomId);
+        res.header('Content-Type', 'application/json; charset=utf-8');
+        res.send(roomInfo);
+    });
+};
+
+const getRoomInfo = (roomId: string): RoomInfo => {
     const redisClient = RedisWrapper.getClient();
     const roomMemberKey: string = makeRoomMemberRedisKey(roomId);
     const roomStatusKey: string = makeRoomStatusRedisKey(roomId);
@@ -130,13 +161,66 @@ function getRoomInfo(roomId: string): RoomInfo {
         });
         return roomInfo;
     });
-}
+};
 
-function separateValues(value: string): string[] {
+// TODO: レースコンディション対策
+const deleteRoomMember = (roomId: string, userId: string): boolean => {
+    const roomMemberKey: string = makeRoomMemberRedisKey(roomId);
+    const roomStatusKey: string = makeRoomStatusRedisKey(roomId);
+    const redisClient = RedisWrapper.getClient();
+
+    return redisClient.multi()
+    .hgetall(roomMemberKey)
+    .hgetall(roomStatusKey)
+    .execAsync()
+    .then((results) => {
+        console.log(results);
+        const teamInfo: object = results[0];
+        const blueMembers: string[] = separateValues(teamInfo['blue']);
+        const redMembers: string[] = separateValues(teamInfo['red']);
+
+        let team = '';
+        let setValue;
+        let index = blueMembers.indexOf(userId);
+        if (index >= 0) {
+            team = 'blue';
+            setValue = blueMembers.splice(index, 1).join(SEPARATOR);
+        }
+        index = redMembers.indexOf(userId);
+        if (index >= 0) {
+            team = 'red';
+            setValue = redMembers.splice(index, 1).join(SEPARATOR);
+        }
+
+        return {
+            team: team,
+            setValue: setValue || '',
+        };
+    })
+    .then((memberInfo) => {
+        if (memberInfo.setValue) {
+            return redisClient.multi()
+            .hdel(roomMemberKey, memberInfo.team)
+            .hdel(roomStatusKey, userId)
+            .execAsync()
+            .then(() => true)
+            .catch((err) => false);
+        } else {
+            return redisClient.multi()
+            .hset(roomMemberKey, memberInfo.team, memberInfo.setValue)
+            .hdel(roomStatusKey, userId)
+            .execAsync()
+            .then(() => true)
+            .catch((err) => false);
+        }
+    });
+};
+
+const separateValues = (value: string): string[] => {
     if (!value) {
         return [];
     }
     const values = value.split(SEPARATOR);
     return values;
-}
+};
 

@@ -37,6 +37,8 @@ app.post('/guild/create', jwt.requireToken, guild.create);
 app.post('/guild/member/add', jwt.requireToken, guild.addMember);
 app.post('/room/create', jwt.requireToken, room.create);
 app.post('/room/join', jwt.requireToken, room.join);
+app.post('/room/leave', jwt.requireToken, room.leave);
+app.post('/room/member/status/update', jwt.requireToken, room.updateMemberStatus);
 
 
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
